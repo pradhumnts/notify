@@ -23,6 +23,7 @@ NavbarAccount.propTypes = {
 };
 
 export default function NavbarAccount({ isCollapse }) {
+  
   return (
     <Link underline="none" color="inherit">
       <RootStyle

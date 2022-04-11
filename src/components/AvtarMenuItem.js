@@ -1,7 +1,7 @@
 import React from 'react'
 import { Avatar, Typography, ListItemText, ListItemAvatar, MenuItem } from '@mui/material';
 import BadgeStatus from './BadgeStatus';
-// utils
+// utilsž
 
 export const AvtarMenuItem = ({ avatar, primaryText, secondaryText }) => {
   return (

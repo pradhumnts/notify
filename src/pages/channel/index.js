@@ -7,7 +7,7 @@ import { GroupListContainer } from '../../components/GroupListContainer'
 // hooks
 import useResponsive from '../../hooks/useResponsive';
 
-import { Grid, Box, Divider, Paper, Typography, Container } from '@mui/material'
+import { Grid, Box, Divider, Typography, Container } from '@mui/material'
 
 import { useTheme } from '@mui/material/styles';
 
@@ -19,16 +19,12 @@ import { MotionContainer, varBounce } from '../../components/animate';
 import { m } from 'framer-motion';
 
 import SeoIllustration from '../../assets/illustration_seo'
-
+import useAuth from '../../hooks/useAuth'
 
 Channel.getLayout = function getLayout(page) {
-    return <Layout>{page}</Layout>;
+    return <Layout title="Notify">{page}</Layout>;
 };
 
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode == "light" ? theme.palette.grey[100] : theme.palette.grey[800],
-}));
-  
 const RootStyle = styled('div')(({ theme }) => ({
   display: 'flex',
   height: '100%',
@@ -39,6 +35,8 @@ const RootStyle = styled('div')(({ theme }) => ({
 }));
 
 export default function Channel() {
+    const { user } = useAuth();
+    
     const handleToggleContentSidebar = () => setMainContentSidebar((prev) => !prev);
     
     const theme = useTheme();
@@ -48,19 +46,22 @@ export default function Channel() {
       <Page title="Dashboard">
           <Grid container spacing={0}>
           <Grid item xs={12} md={4} lg={3}>
-          <Item>
-          <Box sx={{ borderRightStyle: "solid", borderColor: theme.palette.divider, borderWidth: 1 }}>
-
-            <AvtarMenuItem avatar="https://images.unsplash.com/photo-1642752924969-24e2b96a7108?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80" primaryText="Shree Krishna" secondaryText="My Account" />
-
+        
+          <Box sx={{ borderRightStyle: "solid", borderColor: theme.palette.divider, borderWidth: 1, backgroundColor: theme.palette.background.default, height:"100vh" }}>
+        
+            <AvtarMenuItem avatar="" primaryText="Shree Ram" secondaryText="My Account" />
+ 
             <Divider sx={{ m: "0 !important", }}/>
 
             <GroupListContainer listTitle="Channels" add={false} contentHeight={isDesktop ? "80vh" : "100vh"} openGroupContent={handleToggleContentSidebar} />
 
           </Box>
-          </Item>
+          
         </Grid>
+
         <Grid item xs={12} md={8} lg={9}>
+        {isDesktop &&
+        
         <RootStyle>
         <Container component={MotionContainer}>
        
@@ -78,7 +79,8 @@ export default function Channel() {
             </Typography>
           </Box>
           </Container>
-      </RootStyle>
+        </RootStyle>
+       }
         </Grid>
           </Grid>
 

@@ -1,8 +1,5 @@
 import PropTypes from 'prop-types';
 import { Paper, Typography } from '@mui/material';
-import { alpha, styled } from '@mui/material/styles';
-import { useTheme } from '@mui/material/styles';
-
 
 // ----------------------------------------------------------------------
 
@@ -12,7 +9,7 @@ SearchNotFound.propTypes = {
 
 
 export default function SearchNotFound({ searchQuery = '', ...other }) {
-  const theme = useTheme();
+
   return searchQuery ? (
     <Paper
       {...other}

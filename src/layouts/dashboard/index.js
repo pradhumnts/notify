@@ -37,7 +37,7 @@ DashboardLayout.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
-export default function DashboardLayout({ children }) {
+export default function DashboardLayout({ children, title = "" }) {
   const { collapseClick, isCollapse } = useCollapseDrawer();
 
   const { themeLayout } = useSettings();
@@ -46,48 +46,16 @@ export default function DashboardLayout({ children }) {
 
   const [open, setOpen] = useState(false);
 
-  const verticalLayout = themeLayout === 'vertical';
-
-  if (verticalLayout) {
-    return (
-      <>
-        <DashboardHeader onOpenSidebar={() => setOpen(true)} verticalLayout={verticalLayout} />
-
-        {isDesktop ? (
-          <NavbarHorizontal />
-        ) : (
-          <NavbarVertical isOpenSidebar={open} onCloseSidebar={() => setOpen(false)} />
-        )}
-
-        <Box
-          component="main"
-          sx={{
-            px: { lg: 2 },
-            pt: {
-              xs: `${HEADER.MOBILE_HEIGHT + 24}px`,
-              lg: `${HEADER.DASHBOARD_DESKTOP_HEIGHT + 80}px`,
-            },
-            pb: {
-              xs: `${HEADER.MOBILE_HEIGHT + 24}px`,
-              lg: `${HEADER.DASHBOARD_DESKTOP_HEIGHT + 24}px`,
-            },
-          }}
-        >
-          {children}
-        </Box>
-      </>
-    );
-  }
-
   return (
     <Box
       sx={{
         display: { lg: 'flex' },
         minHeight: { lg: 1 },
       }}
-    >
-      {/* <DashboardHeader isCollapse={isCollapse} onOpenSidebar={() => setOpen(true)} /> */}
-
+    > 
+    <Box sx={{ mb:9 }}>
+      {!isDesktop && <DashboardHeader title={title} isCollapse={isCollapse} /> }
+    </Box>
       <VerticalNav isOpenSidebar={true} onCloseSidebar={() => setOpen(true)} />
 
       <MainStyle collapseClick={collapseClick}>{children}</MainStyle>

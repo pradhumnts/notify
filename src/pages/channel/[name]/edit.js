@@ -1,14 +1,12 @@
 // layouts
 import Layout from '../../../layouts';
 import { useRouter } from 'next/router';
-import { Box } from '@mui/material';
+import { Container } from '@mui/material';
 
 // components
 import Page from '../../../components/Page';
 import ChannelNewForm from '../../../sections/channel/ChannelNewForm'
 
-// Provider
-import NotistackProvider from '../../../components/NotistackProvider'
 
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
@@ -24,15 +22,15 @@ import ChannelNotFound from '../../../components/ChannelNotFound';
 import { paramCase, capitalCase } from 'change-case';
 
 GroupEdit.getLayout = function getLayout(page) {
-    return <Layout>{page}</Layout>;
+    return <Layout title="Edit Channel">{page}</Layout>;
 };    
 
 export default function GroupEdit() {
   
     const isDesktop = useResponsive('up', 'md');
 
-    const { query } = useRouter();
-  
+    const { query, pathname } = useRouter();
+    
     const { name } = query;
     
     const currentChannel = channels.find((channel) => paramCase(channel.name) === name);
@@ -45,7 +43,9 @@ export default function GroupEdit() {
       <Page title={`Update Channel`}>
             {!currentChannel && <ChannelNotFound />}
             
-            {currentChannel && <Box sx={{ px: isDesktop ? 12 : "", paddingTop: isDesktop? 10 : 0 }}>
+            {currentChannel && 
+            <Container sx={{ px: isDesktop ? 12 : "", paddingTop: isDesktop? 5 : 0, mt: isDesktop ? 0 : 12 }}>
+            
               {isDesktop && 
                   <HeaderBreadcrumbs
                   heading={`Update ${capitalCase(name)} Settings`}
@@ -55,10 +55,12 @@ export default function GroupEdit() {
                     ]}
                   />
               }
-                  <NotistackProvider>
+               
                     <ChannelNewForm isEdit={true} currentChannel={currentChannel} />
-                  </NotistackProvider>
-                  </Box>}
+             
+             
+               </Container>   
+                  }
         </Page>
     )
 

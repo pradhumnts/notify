@@ -1,34 +1,43 @@
 import { useState } from 'react';
 // @mui
-import { MenuItem, Stack } from '@mui/material';
+import { MenuItem, Stack, Link, useTheme } from '@mui/material';
 // components
 import Image from '../../../components/Image';
 import MenuPopover from '../../../components/MenuPopover';
 import { IconButtonAnimate } from '../../../components/animate';
+// next
+import NextLink from 'next/link';
+import { CHANNEL_DASHBORD } from '../../../routes/paths'
 
+import Iconify from 'src/components/Iconify';
 // ----------------------------------------------------------------------
+
+function path(root, sublink) {
+  return `${root}${sublink}`;
+}
+
+const ROOTS_USER = "user"
 
 const LANGS = [
   {
-    label: 'English',
+    label: 'Create Channel',
     value: 'en',
-    icon: 'https://minimal-assets-api.vercel.app/assets/icons/ic_flag_en.svg',
+    icon: 'fluent:add-12-regular',
+    link: path(CHANNEL_DASHBORD, '/create')
   },
   {
-    label: 'German',
+    label: 'Account',
     value: 'de',
-    icon: 'https://minimal-assets-api.vercel.app/assets/icons/ic_flag_de.svg',
-  },
-  {
-    label: 'French',
-    value: 'fr',
-    icon: 'https://minimal-assets-api.vercel.app/assets/icons/ic_flag_fr.svg',
+    icon: 'ant-design:user-outlined',
+    link: path(ROOTS_USER, '/account')
   },
 ];
 
 // ----------------------------------------------------------------------
 
 export default function LanguagePopover() {
+
+  const theme = useTheme();
   const [open, setOpen] = useState(null);
 
   const handleOpen = (event) => {
@@ -49,7 +58,8 @@ export default function LanguagePopover() {
           ...(open && { bgcolor: 'action.selected' }),
         }}
       >
-        <Image disabledEffect src={LANGS[0].icon} alt={LANGS[0].label} />
+      <Iconify icon={'charm:menu-kebab'} width={22} height={22} />
+
       </IconButtonAnimate>
 
       <MenuPopover
@@ -57,18 +67,28 @@ export default function LanguagePopover() {
         anchorEl={open}
         onClose={handleClose}
         sx={{
-          mt: 1.5,
-          ml: 0.75,
+          mt: 1,
+          mr: 0.75,
           width: 180,
           '& .MuiMenuItem-root': { px: 1, typography: 'body2', borderRadius: 0.75 },
+          '& .css-19aokgc': { display: "none" }
         }}
       >
-        <Stack spacing={0.75}>
+        <Stack spacing={0.2} >
           {LANGS.map((option) => (
             <MenuItem key={option.value} selected={option.value === LANGS[0].value} onClick={handleClose}>
-              <Image disabledEffect alt={option.label} src={option.icon} sx={{ width: 28, mr: 2 }} />
+               <IconButtonAnimate
+                  sx={{
+                    width: 40,
+                    height: 40,
+                  }}
+                >
+                <Iconify icon={option.icon} width={22} height={22} />
 
-              {option.label}
+                </IconButtonAnimate>
+              <NextLink href={option.link} passHref>
+                    <Link variant="subtitle2" sx={{ color: theme.palette.text.secondary }}>{option.label}</Link>
+                </NextLink>
             </MenuItem>
           ))}
         </Stack>

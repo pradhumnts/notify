@@ -106,6 +106,7 @@ function AuthProvider({ children }) {
     };
 
     initialize();
+    
   }, []);
 
   const login = async (email, password) => {
@@ -130,7 +131,7 @@ function AuthProvider({ children }) {
       password,
       firstName,
       lastName,
-    });
+    }); 
     const { accessToken, user } = response.data;
 
     window.localStorage.setItem('accessToken', accessToken);

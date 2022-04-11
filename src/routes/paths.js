@@ -7,6 +7,7 @@ function path(root, sublink) {
 const ROOTS_AUTH = '/auth';
 const ROOTS_DASHBOARD = '/channel';
 const CHANNEL_DASHBORD = '/channel'
+const ROOTS_USER = "/user"
 
 // ----------------------------------------------------------------------
 
@@ -54,13 +55,13 @@ export const PATH_DASHBOARD = {
   calendar: path(ROOTS_DASHBOARD, '/calendar'),
   kanban: path(ROOTS_DASHBOARD, '/kanban'),
   user: {
-    root: path(ROOTS_DASHBOARD, '/user'),
-    profile: path(ROOTS_DASHBOARD, '/user/profile'),
-    cards: path(ROOTS_DASHBOARD, '/user/cards'),
-    list: path(ROOTS_DASHBOARD, '/user/list'),
-    newUser: path(ROOTS_DASHBOARD, '/user/new'),
-    editById: path(ROOTS_DASHBOARD, `/user/reece-chung/edit`),
-    account: path(ROOTS_DASHBOARD, '/user/account'),
+    root: path(ROOTS_USER, '/'),
+    profile: path(ROOTS_USER, '/profile'),
+    cards: path(ROOTS_USER, '/cards'),
+    list: path(ROOTS_USER, '/list'),
+    newUser: path(ROOTS_USER, '/new'),
+    editById: path(ROOTS_USER, `/reece-chung/edit`),
+    account: path(ROOTS_USER, '/account'),
   },
   eCommerce: {
     root: path(ROOTS_DASHBOARD, '/e-commerce'),

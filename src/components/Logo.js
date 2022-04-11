@@ -52,7 +52,7 @@ const Logo = forwardRef(({ disabledLink = false, sx }, ref) => {
     return <>{logo}</>;
   }
 
-  return <NextLink href="/">{logo}</NextLink>;
+  return <NextLink href="/channel">{logo}</NextLink>;
 });
 
 Logo.propTypes = {

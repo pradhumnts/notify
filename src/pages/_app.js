@@ -16,14 +16,21 @@ import { getSettings } from '../utils/settings';
 // contexts
 import { SettingsProvider } from '../contexts/SettingsContext';
 import { CollapseDrawerProvider } from '../contexts/CollapseDrawerContext';
+import { PersistGate } from 'redux-persist/lib/integration/react';
+// redux
+import { persistor } from '../redux/store';
 // theme
 import ThemeProvider from '../theme';
 // components
+
+// Provider
+import NotistackProvider from '../components/NotistackProvider'
 import Settings from '../components/settings';
 import RtlLayout from '../components/RtlLayout';
 import ProgressBar from '../components/ProgressBar';
 import ThemeColorPresets from '../components/ThemeColorPresets';
 import MotionLazyContainer from '../components/animate/MotionLazyContainer';
+import { AuthProvider } from '../contexts/JWTContext';
 
 // ----------------------------------------------------------------------
 
@@ -43,7 +50,9 @@ export default function MyApp(props) {
       <Head>
         <meta name="viewport" content="initial-scale=1, width=device-width" />
       </Head>
-
+      <AuthProvider>
+      <NotistackProvider>
+      <PersistGate loading={null} persistor={persistor}>
       <CollapseDrawerProvider>
         <SettingsProvider defaultSettings={settings}>
           <ThemeProvider>
@@ -59,6 +68,9 @@ export default function MyApp(props) {
           </ThemeProvider>
         </SettingsProvider>
       </CollapseDrawerProvider>
+      </PersistGate>
+      </NotistackProvider>
+      </AuthProvider>
     </>
   );
 }

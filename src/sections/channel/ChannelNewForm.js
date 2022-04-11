@@ -10,7 +10,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
 import { LoadingButton } from '@mui/lab';
 
-import { Box, Card, Grid, Stack, Switch, Typography, FormControlLabel, Divider } from '@mui/material';
+import { Box, Card, Stack, Switch, Typography, FormControlLabel, Divider, TextareaAutosize, Container } from '@mui/material';
 
 // routes
 import { PATH_CHANNEL} from '../../routes/paths';
@@ -25,6 +25,7 @@ import Iconify from '../../components/Iconify';
 import { IconButtonAnimate } from '../../components/animate';
 import { paramCase } from 'change-case';
 // ----------------------------------------------------------------------
+import axios from '../../utils/axios'
 
 
 ChannelNewForm.propTypes = {
@@ -40,19 +41,18 @@ export default function ChannelNewForm({ isEdit = false, currentChannel }) {
   const NewChannelSchema = Yup.object().shape({
     name: Yup.string().required('Name is required'),
     type: Yup.string().required('Channel Type is required'),
-    coverPhoto: Yup.mixed().test('required', 'Avatar is required', (value) => value !== ''),
+    description: Yup.string().required('Description is required'),
   });
   
   const defaultValues = useMemo(
     () => ({
       name: currentChannel?.name || '',
       type: currentChannel?.type || '',
-      status: currentChannel?.status || '',
-      coverPhoto: currentChannel?.coverPhoto || '',
-      isVerified: currentChannel?.isVerified || true,
-      activeEmail: currentChannel?.activeEmail,
-      activeSMS: currentChannel?.activeSMS,
-      activeWhatsapp: currentChannel?.activeWhatsapp,
+      description: currentChannel?.description || '',
+      isActive: currentChannel?.isActive || false,
+      activeEmail: currentChannel?.activeEmail || true,
+      activeSMS: currentChannel?.activeSMS || true,
+      activeWhatsapp: currentChannel?.activeWhatsapp || true,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [currentChannel]
@@ -67,7 +67,6 @@ export default function ChannelNewForm({ isEdit = false, currentChannel }) {
     reset,
     watch,
     control,
-    setValue,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
@@ -85,128 +84,30 @@ export default function ChannelNewForm({ isEdit = false, currentChannel }) {
   }, [isEdit, currentChannel]);
 
   const onSubmit = async () => {
+
     try {
+      await axios.post("http://127.0.0.1:8000/channels/new/", values, {
+        headers: {
+          "accept": "application/json",
+          "Authorization": `JWT ${localStorage.getItem('token')}`,
+        }
+      })
+
       await new Promise((resolve) => setTimeout(resolve, 500));
       reset();
       enqueueSnackbar(!isEdit ? 'Create success!' : 'Update success!');
-      push(`${PATH_CHANNEL.root}/${paramCase(currentChannel.name)}`);
+      // push(`${PATH_CHANNEL.root}/${paramCase(currentChannel.name)}`);
     } catch (error) {
-      console.error(error);
+      console.log(error)
+      enqueueSnackbar(error);
     }
   };
-
-  const handleDrop = useCallback(
-    (acceptedFiles) => {
-      const file = acceptedFiles[0];
-
-      if (file) {
-        setValue(
-          'coverPhoto',
-          Object.assign(file, {
-            preview: URL.createObjectURL(file),
-          })
-        );
-      }
-    },
-    [setValue]
-  );
-
+  
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-      <Grid container spacing={3}>
-        <Grid item xs={12} md={4}>
-          
-          <Card sx={{ py: isDesktop? 10: 5, px: 3 }}>
-            {isEdit && (
-              <Label
-                color={values.status !== 'active' ? 'error' : 'success'}
-                sx={{ textTransform: 'uppercase', position: 'absolute', top: 24, right: 24 }}
-              >
-                {values.status}
-              </Label>
-            )}
-             {!isDesktop && (
-              <Box style={{ display: "flex", justifyContent: "space-between" }}>
-                <Box>
-                  <IconButtonAnimate>
-                    <Iconify icon={'eva:arrow-back-outline'} width={22} height={22} />
-                  </IconButtonAnimate>
-                </Box>
-                </Box>
-              )}
-            <Box sx={{ mb: 5 }}>
-              <RHFUploadAvatar
-                name="coverPhoto"
-                accept="image/*"
-                onDrop={handleDrop}
-                helperText={
-                  <Typography
-                    variant="caption"
-                    sx={{
-                      mt: 2,
-                      mx: 'auto',
-                      display: 'block',
-                      textAlign: 'center',
-                      color: 'text.secondary',
-                    }}
-                  >
-                    Allowed *.jpeg, *.jpg, *.png, *.gif
-                    <br /> 
-                  </Typography>
-                }
-              />
-            </Box>
+        
 
-            {isEdit && (
-              <FormControlLabel
-                labelPlacement="start"
-                control={
-                  <Controller
-                    name="status"
-                    control={control}
-                    render={({ field }) => (
-                      <Switch
-                        {...field}
-                        checked={field.value !== 'disabled'}
-                        onChange={(event) => field.onChange(event.target.checked ? 'active' : 'disabled')}
-                      />
-                    )}
-                  />
-                }
-                label={
-                  <>
-                    <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
-                      Active
-                    </Typography>
-                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                      Apply disable account
-                    </Typography>
-                  </>
-                }
-                sx={{ mx: 0, mb: 3, width: 1, justifyContent: 'space-between' }}
-              />
-            )}
-  
-            <RHFSwitch
-              name="isVerified"
-              labelPlacement="start"
-              label={
-                <>
-                  <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
-                    Email Verified
-                  </Typography>
-                  <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                    Disabling this will automatically send the user a verification email
-                  </Typography>
-                </>
-              }
-              sx={{ mx: 0, width: 1, justifyContent: 'space-between' }}
-            />
-          </Card>
-        </Grid>
-
-        <Grid item xs={12} md={8}>
-          <Card sx={{ p: 3 }}>
+          <Card sx={{ p: 3,  }}>
             <Box
               sx={{
                 display: 'grid',
@@ -216,16 +117,16 @@ export default function ChannelNewForm({ isEdit = false, currentChannel }) {
               }}
             >
               <RHFTextField name="name" label="Channel Name" />
-
+              
               <RHFSelect name="type" label="Channel Type" placeholder="Channel Type">
                   <option value="" />
-                  <option value="normal">Normal</option>
-                  <option value="individual">Individual</option>
-                  <option value="normalSub">Normal - Sub Channel</option>
-                  <option value="individualSub">Individual - Sub Channel</option>
+                  <option value="Normal">Normal</option>
+                  <option value="Individual">Individual</option>
               </RHFSelect>
           
             </Box>
+            
+            <RHFTextField name="description" sx={{ mt:3 }} label="Description" />
 
             <Divider sx={{ my: 4 }}/>
             <Stack sx={{ rowGap: 3 }}>
@@ -282,8 +183,45 @@ export default function ChannelNewForm({ isEdit = false, currentChannel }) {
               </LoadingButton>
             </Stack>
           </Card>
-        </Grid>
-      </Grid>
+   
+          <Card sx={{ p: 3, display: isDesktop ? 'flex' : "", alignItems: isDesktop ? 'center' : "", mt: 2}}>
+                 <FormControlLabel
+                   labelPlacement="start"
+                   control={
+                     <Controller
+                       name="isActive"
+                       control={control}
+                       render={({ field }) => (
+                         <Switch
+                           {...field}
+                           checked={field.value !== 'disabled'}
+                           onChange={(event) => field.onChange(event.target.checked ? 'active' : 'disabled')}
+                         />
+                       )}
+                     />
+                   }
+                   label={
+                     <>
+                       <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
+                         Active
+                       </Typography>
+                       
+                       <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                         Disabling this will stop all the scheduled tasks and messages of this channel.
+                       </Typography>
+                     </>
+                   }
+                   sx={{ mr: 5, ml: 0, width: 1, justifyContent: 'space-between' }}
+                 />
+                 {isDesktop && 
+               <Label
+                 color={values.isActive !== 'active' ? 'error' : 'success'}
+                 sx={{ textTransform: 'uppercase' }}>
+                 { values.isActive === 'active' ? 'active' : 'disabled' }
+               </Label>
+                }
+             </Card>
+      
     </FormProvider>
   );
 }

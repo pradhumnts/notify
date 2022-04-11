@@ -18,8 +18,7 @@ import { NavSectionVertical } from '../../../components/nav-section';
 //
 import navConfig from './NavConfig';
 
-import NavbarAccount from './NavbarAccount';
-
+import AccountPopover from '../header/AccountPopover';
 // ----------------------------------------------------------------------
 
 const RootStyle = styled('div')(({ theme }) => ({
@@ -85,7 +84,7 @@ export default function NavbarVertical({ isOpenSidebar, onCloseSidebar }) {
       <Box sx={{ flexGrow: 1 }} />
       <Box sx={{ display: "flex", justifyContent: "center", mb: 5 }}>
 
-      <NavbarAccount isCollapse={true} />
+      <AccountPopover />
       </Box>
 
     </Scrollbar>

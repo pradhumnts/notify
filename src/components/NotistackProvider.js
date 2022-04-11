@@ -22,7 +22,7 @@ function SnackbarStyles() {
             width: '100%',
             padding: theme.spacing(1),
             margin: theme.spacing(0.25, 0),
-            boxShadow: theme.customShadows.z8,
+
             borderRadius: theme.shape.borderRadius,
             color: theme.palette.grey[isLight ? 0 : 800],
             backgroundColor: theme.palette.grey[isLight ? 900 : 0],

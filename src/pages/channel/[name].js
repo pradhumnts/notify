@@ -166,7 +166,7 @@ export default function PageOne() {
       <Grid container spacing={0}>
         <Grid item xs={12} md={4} lg={3}>
           <Item>
-          <Box sx={{ borderRightStyle: "solid", borderColor: theme.palette.divider, borderWidth: 1 }}>
+          <Box sx={{ borderRightStyle: "solid", borderColor: theme.palette.divider, borderWidth: 1, backgroundColor: theme.palette.background.default }}>
 
             <AvtarMenuItem avatar="https://images.unsplash.com/photo-1642752924969-24e2b96a7108?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80" primaryText="Shree Krishna" secondaryText="My Account" />
 
